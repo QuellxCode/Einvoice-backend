@@ -3,18 +3,15 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const app = express();
+
 const user = require("./routes/users");
 const tender = require("./routes/tender");
 const itb = require("./routes/itb");
 const notification = require("./routes/notification");
 const pec = require("./routes/pec");
+const comparison = require("./routes/comparison");
 const workdone = require("./routes/workdone");
 const workorder = require("./routes/workorder");
-const quotation = require("./routes/quotation");
-const quotationLog = require("./routes/quotationLog");
-const comparison = require("./routes/comparison");
-const pst_invoice = require("./routes/pst_invoice");
-const fst_invoice = require("./routes/fst_invoice");
 
 const cors = require("cors");
 app.use(cors());
@@ -52,11 +49,10 @@ let db;
 //DB config
 // const environment = require("./config/keys").ENVIRONMENT;
 // if (environment == "live")
-//db = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@eplaza-vpoui.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true`;
+db = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@eplaza-vpoui.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true`;
 // } else {
-db = require("./config/keys").MongoUri;
+//db = require("./config/keys").MongoUri;
 // }
-console.log(db);
 //Connect to Mongo
 MONGODB_URI = mongoose
   .connect(db, {
@@ -84,14 +80,10 @@ app.use("/api/users", user);
 app.use("/api/tenders", tender);
 app.use("/api/itb", itb);
 app.use("/api/pec", pec);
+app.use("/api/comparison", comparison);
 app.use("/api/workdone", workdone);
 app.use("/api/notification", notification);
 app.use("/api/workorder", workorder);
-app.use("/api/quotation", quotation);
-app.use("/api/quotation-log", quotationLog);
-app.use("/api/comparison", comparison);
-app.use("/api/pst_invoice", pst_invoice);
-app.use("/api/fst_invoice", fst_invoice);
 
 const PORT = process.env.PORT || 3000;
 

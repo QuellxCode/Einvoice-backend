@@ -12,19 +12,13 @@ const { Itb, validate } = require("../models/Itb");
 router.post("/:id", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  let tender = await Tender.findOne({ _id: req.params.id });
+  let tender = await Tendor.findOne(req.params.id);
   if (!tender) res.json({ msg: "No tender with such id exists" });
-  tender = await Tender.updateOne(
-    { _id: req.params.id },
-    { $set: { status: 1 } },
-    { new: true }
-  );
   itb = new Itb(req.body);
   itb.tender_id = req.params.id;
   itb.save();
-  return res.status(200).json({
-    message: "ITB Saved Successfully",
-    itb_id: itb._id
+  return res.send(200).json({
+    itb
   });
 });
 

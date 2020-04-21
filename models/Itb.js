@@ -48,24 +48,23 @@ const ItbSchema = new mongoose.Schema({
     required: true
   },
   files: {
-    type: String
+    type: String,
+    required: true
   }
 });
 const Itb = mongoose.model("Itb", ItbSchema);
 function validateItb(itb) {
   const schema = {
     tender_id: Joi.string(),
-    serial_number: Joi.number(),
-    Diary: Joi.number(),
+    serial_number: Joi.string()
+      .min(3)
+      .max(50)
+      .required(),
+    Diary: Joi.string()
+      .min(3)
+      .max(50)
+      .required(),
     title: Joi.string()
-      .min(3)
-      .max(50)
-      .required(),
-    type: Joi.string()
-      .min(3)
-      .max(50)
-      .required(),
-    source: Joi.string()
       .min(3)
       .max(50)
       .required(),
