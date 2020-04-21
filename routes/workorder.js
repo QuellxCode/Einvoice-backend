@@ -13,8 +13,7 @@ const { WorkOrder, validate } = require("../models/WorkOrder");
 router.post("/:id", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  let tender = await Tendor.findOne({ _id: req.params.id });
-  let(itb) = await Itb.findOne({ tender_id: req.params.id });
+  let tender = await Tendor.findOne(req.params.id);
   if (!tender) res.json({ msg: "No tender with such id exists" });
   let workorder = new WorkOrder(req.body);
   workorder.tender_id = req.params.id;

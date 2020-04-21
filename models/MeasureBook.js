@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const MeasureBookSchema = new mongoose.Schema({
+  tender_id: {
+    type: String
+  },
   details: [
     {
       description: {
@@ -25,14 +28,14 @@ const MeasureBookSchema = new mongoose.Schema({
     }
   ],
   mb_id: {
-    type: String,
-    required: true
+    type: String
   }
 });
 const MeasureBook = mongoose.model("MeasureBook", MeasureBookSchema);
 function validateMeasureBook(mb) {
   const schema = {
-    mb_id: Joi.string().required(),
+    mb_id: Joi.string(),
+    tender_id: Joi.string(),
     details: Joi.array().items({
       description: Joi.string().required(),
       unit: Joi.string().required(),

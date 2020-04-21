@@ -1,9 +1,16 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const TenderSchema = new mongoose.Schema({
-  engineer_id: { type: String },
-  status: { type: String, default: "0" },
-  ongoing: { type: String, default: "0" },
+  director_id: {
+    type: String
+  },
+  engineers: [
+    {
+      assigned_task: { type: String }
+    }
+  ],
+  status: { type: String, default: "Tender" },
+  ongoing: { type: String, default: "draft" },
   details: {
     work_title: {
       type: String,
@@ -61,7 +68,10 @@ const TenderSchema = new mongoose.Schema({
 const Tender = mongoose.model("Tender", TenderSchema);
 function validateTender(tender) {
   const schema = {
-    engineer_id: Joi.string(),
+    engineers: Joi.array().items({
+      engineer_id: Joi.string(),
+      assigned_task: Joi.string()
+    }),
     details: Joi.object().keys({
       work_title: Joi.string()
         .min(3)

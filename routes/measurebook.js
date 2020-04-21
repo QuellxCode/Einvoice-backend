@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
-const { MeasureBook } = require("../models/MeasureBook");
+const { MeasureBook, validate } = require("../models/MeasureBook");
 
-router.post("/", auth, async (req, res) => {
+router.post("/:id", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   let mb = new MeasureBook(req.body);
+  mb.tender_id = req.params.id;
   await mb.save();
   return res.json({
     mb

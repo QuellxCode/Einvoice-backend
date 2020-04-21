@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
-const { Invoice } = require("../models/Invoice");
+const { Invoice, validate } = require("../models/Invoice");
 
 router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
