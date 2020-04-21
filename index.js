@@ -25,7 +25,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json({ extended: false }));
 
-
 //Passport Config
 
 require("./config/passport")(passport);
@@ -33,9 +32,9 @@ let db;
 //DB config
 // const environment = require("./config/keys").ENVIRONMENT;
 // if (environment == "live")
-//db = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@eplaza-vpoui.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true`;
+db = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@eplaza-vpoui.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true`;
 // } else {
-db = require("./config/keys").MongoUri;
+//db = require("./config/keys").MongoUri;
 // }
 console.log(db);
 //Connect to Mongo
@@ -44,17 +43,17 @@ MONGODB_URI = mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    useFindAndModify: false
+    useFindAndModify: false,
   })
   .then(() => console.log("Mongodb connected"))
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
 
 //Body Parser
 
 // configure the app to use bodyParser()
 app.use(
   bodyParser.urlencoded({
-    extended: true
+    extended: true,
   })
 );
 app.use(bodyParser.json());

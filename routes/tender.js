@@ -11,8 +11,6 @@ router.post("/", auth, async (req, res) => {
   let user_id = req.user._id;
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  let tender = await Tender.findOne({ email: req.body.email });
-  //if (tender) return res.status(400).send("Tender already registered.");
   tender = new Tender(req.body);
   console.log(typeof req.user._id);
   eng.engineer_id = user_id;
@@ -44,7 +42,7 @@ router.post("/", auth, async (req, res) => {
   res.json({
     message: "Tender added successfully",
     tender: tender._id,
-    tenders
+    tenders,
   });
 });
 
@@ -69,7 +67,7 @@ router.get("/", auth, async (req, res) => {
   }
   if (!tender) return res.status(400).send("No tender created.");
   res.json({
-    tender_array
+    tender_array,
   });
 });
 
@@ -78,7 +76,7 @@ router.get("/:id", auth, async (req, res) => {
   let tender = await Tender.findOne({ director: user_id, _id: req.params.id });
   if (!tender) return res.status(400).send("No tender created.");
   res.json({
-    tender
+    tender,
   });
 });
 
@@ -87,33 +85,33 @@ router.get("/:id", auth, async (req, res) => {
 router.patch("/:id", auth, async (req, res) => {
   let tender = await Tender.find({
     _id: req.params.id,
-    director: req.user._id
+    director: req.user._id,
   });
   if (!tender) return res.status(400).send("This Tender doesnot exists");
   tender = await Tender.findByIdAndUpdate(
     { _id: req.params.id },
     {
       $set: {
-        name: req.body.name,
-        phone: req.body.phone,
-        cnic: req.body.cnic
-      }
+        details: req.body.details,
+        bid_bond: req.body.bid_bond,
+        tender: req.body.tender,
+      },
     },
     { new: true }
   );
   return res.status(200).json({
-    msg: "Tender has been updated"
+    msg: "Tender has been updated",
   });
 });
 
 router.delete("/:id", auth, async (req, res) => {
   let tender = await Tender.deleteOne({
     _id: req.params.id,
-    director: req.user._id
+    director: req.user._id,
   });
   if (!tender) return res.status(400).send("This Tender doesnot exists");
   res.json({
-    tender
+    tender,
   });
 });
 

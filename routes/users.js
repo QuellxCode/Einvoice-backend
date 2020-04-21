@@ -27,7 +27,7 @@ router.post("/signup", async (req, res) => {
   res.json({
     message: "signup successfull",
     user: user._id,
-    token: token
+    token: token,
   });
 });
 
@@ -38,7 +38,7 @@ router.post("/login", (req, res, next) => {
         const error = new Error(err);
         return next(error);
       }
-      req.login(user, { session: false }, async error => {
+      req.login(user, { session: false }, async (error) => {
         if (error) return next(error);
         if (user) {
           const token = jwt.sign(
@@ -51,7 +51,7 @@ router.post("/login", (req, res, next) => {
             name: user.name,
             token: token,
             email: user.email,
-            roles: user.roles
+            roles: user.roles,
           });
         } else {
           res.send("not login");
@@ -78,7 +78,7 @@ router.post("/", auth, async (req, res) => {
   await employee.save();
   res.json({
     message: "User added successfully",
-    employee: employee._id
+    employee: employee._id,
   });
 });
 
@@ -87,7 +87,7 @@ router.get("/", auth, async (req, res) => {
   let employee = await User.find({ director: user_id });
   if (!employee) return res.status(400).send("No employee created.");
   res.json({
-    employee
+    employee,
   });
 });
 
@@ -96,14 +96,14 @@ router.get("/:id", auth, async (req, res) => {
   let employee = await User.findOne({ director: user_id, _id: req.params.id });
   if (!employee) return res.status(400).send("No employee created.");
   res.json({
-    employee
+    employee,
   });
 });
 
 router.patch("/:id", auth, async (req, res) => {
   let employee = await User.find({
     _id: req.params.id,
-    director: req.user._id
+    director: req.user._id,
   });
   if (!employee) return res.status(400).send("This User doesnot exists");
   employee = await User.findByIdAndUpdate(
@@ -112,24 +112,49 @@ router.patch("/:id", auth, async (req, res) => {
       $set: {
         name: req.body.name,
         phone: req.body.phone,
-        cnic: req.body.cnic
-      }
+        cnic: req.body.cnic,
+        email: req.body.email,
+        address: req.body.address,
+      },
     },
     { new: true }
   );
   return res.status(200).json({
-    msg: "User has been updated"
+    msg: "User has been updated",
+  });
+});
+
+router.patch("/profile", auth, async (req, res) => {
+  let employee = await User.find({
+    _id: req.user._id,
+  });
+  if (!employee) return res.status(400).send("This User doesnot exists");
+  employee = await User.findByIdAndUpdate(
+    { _id: req.user._id },
+    {
+      $set: {
+        name: req.body.name,
+        phone: req.body.phone,
+        cnic: req.body.cnic,
+        email: req.body.email,
+        address: req.body.address,
+      },
+    },
+    { new: true }
+  );
+  return res.status(200).json({
+    msg: "User has been updated",
   });
 });
 
 router.delete("/:id", auth, async (req, res) => {
   let employee = await User.deleteOne({
     _id: req.params.id,
-    director: req.user._id
+    director: req.user._id,
   });
   if (!employee) return res.status(400).send("This User doesnot exists");
   res.json({
-    employee
+    employee,
   });
 });
 
@@ -140,7 +165,7 @@ router.post("/create", auth, async (req, res) => {
   team.save();
   return res.json({
     message: "Team Created Successfully",
-    team_id: team._id
+    team_id: team._id,
   });
 });
 
