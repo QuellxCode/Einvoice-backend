@@ -81,7 +81,7 @@ const TenderSchema = new mongoose.Schema({
   },
   doc_submission: {
     doc_date: {
-      type: Number,
+      type: Date,
       required: true,
     },
     doc_time: {
@@ -126,6 +126,11 @@ function validateTender(tender) {
       bid_bond_fee: Joi.number().required(),
       bid_bond_shape: Joi.string().min(3).max(50).required(),
       bid_bond_favor: Joi.string().min(3).max(50).required(),
+    }),
+    doc_fee: Joi.object().keys({
+      bid_bond_doc_fee: Joi.number().required(),
+      bid_bond_doc_shape: Joi.string().min(3).max(50).required(),
+      bid_bond_doc_favor: Joi.string().min(3).max(50).required(),
     }),
     tender: Joi.object().keys({
       tender_fee: Joi.number().required(),

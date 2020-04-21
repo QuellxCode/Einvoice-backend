@@ -49,31 +49,30 @@ router.post("/", auth, async (req, res) => {
 router.get("/", auth, async (req, res) => {
   let user_roles = req.user.roles;
   let user_id = req.user._id;
-  let tender;
   let tender_array = [];
-  let team;
-  if (user_roles == "Director") {
-    tender = await Tender.find({ director: user_id });
-  } else {
-    team = await Team.find({});
-    for (let t of team) {
-      for (let team_member of t.team) {
-        if (user_id == team_member.engineer || user_id == team_member.manager) {
-          tender = await Tender.findOne({ _id: t.tender_id });
-          tender_array.push(tender);
-        }
-      }
-    }
-  }
+  let tender = await Tender.find();
+  // if (user_roles == "Director") {
+  //   tender = await Tender.find({ director: user_id });
+  // } else {
+  //   team = await Team.find({});
+  //   for (let t of team) {
+  //     for (let team_member of t.team) {
+  //       if (user_id == team_member.engineer || user_id == team_member.manager) {
+  //         tender = await Tender.findOne({ _id: t.tender_id });
+  //         tender_array.push(tender);
+  //       }
+  //     }
+  //   }
+  // }
   if (!tender) return res.status(400).send("No tender created.");
   res.json({
-    tender_array,
+    tender,
   });
 });
 
 router.get("/:id", auth, async (req, res) => {
   let user_id = req.user._id;
-  let tender = await Tender.findOne({ director: user_id, _id: req.params.id });
+  let tender = await Tender.findOne({ _id: req.params.id });
   if (!tender) return res.status(400).send("No tender created.");
   res.json({
     tender,

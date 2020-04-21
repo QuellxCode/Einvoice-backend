@@ -124,7 +124,7 @@ router.patch("/:id", auth, async (req, res) => {
   });
 });
 
-router.patch("/profile", auth, async (req, res) => {
+router.post("/profile", auth, async (req, res) => {
   let employee = await User.find({
     _id: req.user._id,
   });
