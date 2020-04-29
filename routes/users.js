@@ -128,7 +128,20 @@ router.post("/profile", auth, async (req, res) => {
   let employee = await User.find({
     _id: req.user._id,
   });
-  if (!employee) return res.status(400).send("This User doesnot exists");
+  if (!employee)
+    return res.status(400).json({ msg: "This User doesnot exists" });
+  let emp_data = await User.findOne({ email: req.body.email });
+  if (emp_data) {
+    return res
+      .status(400)
+      .json({ msg: "Employee with this email already exists" });
+  }
+  emp_data = await User.findOne({ cnic: req.body.cnic });
+  if (emp_data) {
+    return res
+      .status(400)
+      .json({ msg: "Employee with this cnic already exists" });
+  }
   employee = await User.findByIdAndUpdate(
     { _id: req.user._id },
     {

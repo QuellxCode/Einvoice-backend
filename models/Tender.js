@@ -4,6 +4,9 @@ const TenderSchema = new mongoose.Schema({
   director_id: {
     type: String,
   },
+  user_id: {
+    type: String,
+  },
   engineers: [
     {
       assigned_task: { type: String },

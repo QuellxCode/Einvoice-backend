@@ -15,6 +15,9 @@ router.post("/", auth, async (req, res) => {
   console.log(typeof req.user._id);
   eng.engineer_id = user_id;
   eng.assigned_status = "tender info";
+  let user = await User.findOne({ _id: req.user._id });
+  tender.user_id = req.user._id;
+  tender.director_id = user.director;
   await tender.save();
   console.log(tender._id);
   let tender_id = tender._id;
@@ -26,7 +29,6 @@ router.post("/", auth, async (req, res) => {
   console.log(tenders);
   //Notification starts
 
-  let user = await User.findOne({ _id: req.user._id });
   let to = user.director;
   let message = req.body.details.work_title + " Tender has been created ";
   let from = req.user._id;
@@ -84,7 +86,6 @@ router.get("/:id", auth, async (req, res) => {
 router.patch("/:id", auth, async (req, res) => {
   let tender = await Tender.find({
     _id: req.params.id,
-    director: req.user._id,
   });
   if (!tender) return res.status(400).send("This Tender doesnot exists");
   tender = await Tender.findByIdAndUpdate(
@@ -94,6 +95,9 @@ router.patch("/:id", auth, async (req, res) => {
         details: req.body.details,
         bid_bond: req.body.bid_bond,
         tender: req.body.tender,
+        doc_fee: req.body.doc_fee,
+        doc_submission: req.body.doc_submission,
+        doc_purchase: req.body.doc_purchase,
       },
     },
     { new: true }

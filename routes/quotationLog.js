@@ -11,16 +11,26 @@ router.post("/", auth, async (req, res) => {
   await quotationLog.save();
   return res.json({
     message: "Quotation Log Created successfully",
-    QuotationLogID: quotationLog._id
+    QuotationLogID: quotationLog._id,
   });
 });
 
 router.get("/:id", auth, async (req, res) => {
-    let quotationLog = await QuotationLog.findOne({ _id: req.params.id });
-    if (!quotationLog) return res.status(400).json({ msg: "Quotation Log does not exist" });
-    res.status(200).json({
-        quotationLog
-    });
+  let quotationLog = await QuotationLog.findOne({ _id: req.params.id });
+  if (!quotationLog)
+    return res.status(400).json({ msg: "Quotation Log does not exist" });
+  res.status(200).json({
+    quotationLog,
+  });
+});
+
+router.get("/", auth, async (req, res) => {
+  let quotationLog = await QuotationLog.find({});
+  if (!quotationLog)
+    return res.status(400).json({ msg: "Quotation Log does not exist" });
+  res.status(200).json({
+    quotationLog,
+  });
 });
 
 module.exports = router;
