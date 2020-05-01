@@ -118,4 +118,24 @@ router.delete("/:id", auth, async (req, res) => {
   });
 });
 
+router.patch("/approval-update/:id", async (req, res) => {
+  try {
+    let tender = await Tender.updateOne(
+      { _id: req.params.id },
+      { isApproved: req.body.isApproved }
+    );
+
+    tender = await Tender.findOne({ _id: req.params.id });
+
+    if (!tender) return res.status(400).send("Tender doesn't exists.");
+
+    res.status(200).json({
+      msg: "Tender updated Sucessfully",
+      tender,
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 module.exports = router;

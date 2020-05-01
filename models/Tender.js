@@ -12,6 +12,11 @@ const TenderSchema = new mongoose.Schema({
       assigned_task: { type: String },
     },
   ],
+  isApproved:{
+    type: String,
+    enum : ['pending','approved', 'rejected'],
+    default: 'pending'
+},
   status: { type: String, default: "Tender" },
   ongoing: { type: String, default: "draft" },
   details: {
@@ -150,6 +155,7 @@ function validateTender(tender) {
       purchase_time: Joi.string().min(3).max(50).required(),
       purchase_venue: Joi.string().min(3).max(50).required(),
     }),
+    isApproved: Joi.string()
   };
   return Joi.validate(tender, schema);
 }

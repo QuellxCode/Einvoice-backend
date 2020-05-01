@@ -91,6 +91,33 @@ router.get("/", auth, async (req, res) => {
   });
 });
 
+router.get("/Engineer", auth, async (req, res) => {
+  let user_id = req.user._id;
+  let employee = await User.find({ director: user_id, roles: "Engineer" });
+  if (!employee) return res.status(400).send("No employee created.");
+  res.json({
+    employee,
+  });
+});
+
+router.get("/manager", auth, async (req, res) => {
+  let user_id = req.user._id;
+  let employee = await User.find({ director: user_id, roles: "Manager" });
+  if (!employee) return res.status(400).send("No employee created.");
+  res.json({
+    employee,
+  });
+});
+
+router.get("/accountant", auth, async (req, res) => {
+  let user_id = req.user._id;
+  let employee = await User.find({ director: user_id, roles: "Accountant" });
+  if (!employee) return res.status(400).send("No employee created.");
+  res.json({
+    employee,
+  });
+});
+
 router.get("/:id", auth, async (req, res) => {
   let user_id = req.user._id;
   let employee = await User.findOne({ director: user_id, _id: req.params.id });
@@ -171,10 +198,11 @@ router.delete("/:id", auth, async (req, res) => {
   });
 });
 
-router.post("/create", auth, async (req, res) => {
+router.post("/create/:id", auth, async (req, res) => {
   let user_id = req.user._id;
   let team = new Team(req.body);
   team.director = user_id;
+  team.tender_id = req.params.id;
   team.save();
   return res.json({
     message: "Team Created Successfully",
