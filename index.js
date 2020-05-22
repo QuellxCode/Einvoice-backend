@@ -29,10 +29,12 @@ app.use(express.json({ extended: false }));
 
 require("./config/passport")(passport);
 let db;
+ db ='mongodb+srv://eplaza:C9cVzVUfFdI9yvOk@eplaza-vpoui.mongodb.net/eInvoice'
+
 //DB config
 // const environment = require("./config/keys").ENVIRONMENT;
 // if (environment == "live")
-db = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@eplaza-vpoui.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true`;
+//db = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@eplaza-vpoui.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true`;
 // } else {
 //db = require("./config/keys").MongoUri;
 // }
