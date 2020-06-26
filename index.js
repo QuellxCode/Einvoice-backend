@@ -61,6 +61,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/", require("./routes/index"));
 
 app.use("/api/users", user);
 app.use("/api/tenders", tender);
