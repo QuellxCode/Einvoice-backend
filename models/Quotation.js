@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const quotationSchema = new mongoose.Schema({
+  engineer_id:{
+    type: String,
+  },
   quotationNo: {
     type: Number
     //required: true
@@ -83,6 +86,7 @@ status:{
 const Quotation = mongoose.model("Quotation", quotationSchema);
 function validateQuotation(quotation) {
   const schema = {
+    engineer_id:Joi.string(),
     client_ref: Joi.number().required(),
     dept_client: Joi.string().required(),
     bid_validity: Joi.string().required(),

@@ -14,6 +14,8 @@ router.post("/", auth, async (req, res) => {
   });
 });
 
+
+
 router.get("/", auth, async (req, res) => {
   let fst = await FST_invoice(req.body);
   await fst.save();

@@ -47,6 +47,10 @@ const UserSchema = new mongoose.Schema({
   },
   roles: {
     type: String
+  },
+  refer_for_bid_bond_cermony: {
+    type: String,
+    default: 0
   }
 });
 UserSchema.methods.isValidPassword = async function(password) {
@@ -57,6 +61,8 @@ UserSchema.methods.isValidPassword = async function(password) {
 const User = mongoose.model("User", UserSchema);
 function validateUser(user) {
   const schema = {
+    director: Joi.string(),
+    refer_for_bid_bond_cermony:Joi.string(),
     name: Joi.string()
       .min(3)
       .max(50)

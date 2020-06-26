@@ -9,6 +9,15 @@ const TeamSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  module_id :{
+    type: String,
+  },
+  status: {
+    type: String
+  },
+  engineer:{
+    type: String
+  },
   team: [
     {
       engineer: {
@@ -35,7 +44,11 @@ function validateTeam(team) {
       manager: Joi.string().required(),
       accountant: Joi.string().required()
     }),
-    tender_id: Joi.string().required()
+    tender_id: Joi.string().required(),
+    director: Joi.string().required(),
+    status:Joi.string(),
+    engineer:Joi.string(),
+    module_id:Joi.string()
   };
   return Joi.validate(team, schema);
 }

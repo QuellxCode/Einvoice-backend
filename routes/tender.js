@@ -10,7 +10,7 @@ router.post("/", auth, async (req, res) => {
   let eng = [];
   let user_id = req.user._id;
   const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).json({msg: error.details[0].message});
   tender = new Tender(req.body);
   console.log(typeof req.user._id);
   eng.engineer_id = user_id;
@@ -29,16 +29,16 @@ router.post("/", auth, async (req, res) => {
   console.log(tenders);
   //Notification starts
 
-  let to = user.director;
-  let message = req.body.details.work_title + " Tender has been created ";
-  let from = req.user._id;
-  let notification = new Notification();
+  // let to = user.director;
+  // let message = req.body.details.work_title + " Tender has been created ";
+  // let from = req.user._id;
+  // let notification = new Notification();
 
-  notification.to = to;
-  notification.director = to;
-  notification.from = from;
-  notification.message = message;
-  notification.save();
+  // notification.to = to;
+  // notification.director = to;
+  // notification.from = from;
+  // notification.message = message;
+  // notification.save();
 
   //Notification ends
   res.json({
@@ -75,7 +75,7 @@ router.get("/", auth, async (req, res) => {
 router.get("/:id", auth, async (req, res) => {
   let user_id = req.user._id;
   let tender = await Tender.findOne({ _id: req.params.id });
-  if (!tender) return res.status(400).send("No tender created.");
+  if (!tender) return res.status(400).json({msg:"No tender created."});
   res.json({
     tender,
   });
@@ -137,5 +137,27 @@ router.patch("/approval-update/:id", async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+
+// update Quotation_Module status on director acceptance/rejection
+router.post("/change-status/tender-quotation", auth, async (req, res) => {
+  try {
+    tender = await Tender.updateOne(
+      { _id: req.body.id },
+      { $set: { Quotation_module: req.body.status } },
+      { new: true }
+    );
+
+    if (!tender) return res.status(400).json({msg :"Tender doesn't exists."});
+
+    res.status(200).json({
+      msg: "Status Change Successfully!"
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error.details[0].message);
+  }
+});
+
 
 module.exports = router;

@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const TenderSchema = new mongoose.Schema({
+  serial_no:{
+    type: String,
+  },
   director_id: {
     type: String,
   },
@@ -12,11 +15,17 @@ const TenderSchema = new mongoose.Schema({
       assigned_task: { type: String },
     },
   ],
-  isApproved:{
+  isApproved: {
     type: String,
-    enum : ['pending','approved', 'rejected'],
-    default: 'pending'
-},
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
+  },
+  tender_status: {
+    type: String,
+    enum: ["purchased", "notPurchased", "expired", "cancelled"],
+    default: "notPurchased",
+  },
+  isAssigned:{ type: String, default: 0 }, 
   status: { type: String, default: "Tender" },
   ongoing: { type: String, default: "draft" },
   details: {
@@ -115,6 +124,14 @@ const TenderSchema = new mongoose.Schema({
       required: true,
     },
   },
+  Quotation_module:{
+    type: String,
+    default: 0
+  },
+  created_at: {
+    type: Date,
+    default: Date.now
+  }
 });
 const Tender = mongoose.model("Tender", TenderSchema);
 function validateTender(tender) {
@@ -155,7 +172,14 @@ function validateTender(tender) {
       purchase_time: Joi.string().min(3).max(50).required(),
       purchase_venue: Joi.string().min(3).max(50).required(),
     }),
-    isApproved: Joi.string()
+    isApproved: Joi.string(),
+    tender_status:Joi.string(),
+    isAssigned:Joi.string(), 
+    status:Joi.string(),
+    created_at:Joi.string(),
+    Quotation_module:Joi.string(),
+    serial_no:Joi.string(),
+  
   };
   return Joi.validate(tender, schema);
 }

@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const WorkOrderSchema = new mongoose.Schema({
-  tender_id: {},
+  tender_id: {
+    type: String
+  },
   Work_order_amount: {
     type: Number,
     required: true
@@ -30,10 +32,6 @@ const WorkOrderSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  Work_Order_no: {
-    type: String,
-    required: true
-  },
   client_name: {
     type: String,
     required: true
@@ -47,47 +45,37 @@ const WorkOrderSchema = new mongoose.Schema({
     required: true
   },
   start_date: {
-    type: Date,
+    type: String,
     required: true
   },
   end_date: {
-    type: Date,
+    type: String,
     required: true
   }
 });
 const WorkOrder = mongoose.model("WorkOrder", WorkOrderSchema);
 function validateWorkOrder(WorkOrder) {
   const schema = {
+    quotation_log: Joi.string(),
     tender_id: Joi.string(),
-    Work_order_amount: Joi.number().required(),
-    Diary: Joi.number().required(),
+    Account_Number: Joi.string(),
+    File_Number: Joi.string(),
+    Work_order_amount:  Joi.string(),
+    Diary:  Joi.string(),
+    Project_Title: Joi.string(),
+    type:Joi.string(),
+    start_date:Joi.string(),
+    end_date:Joi.string(),
     Project_Manager: Joi.string()
       .min(3)
-      .max(50)
-      .required(),
-    title: Joi.string()
-      .min(3)
-      .max(50)
-      .required(),
+      .max(50),
     client_name: Joi.string()
       .min(3)
-      .max(50)
-      .required(),
+      .max(50),
     location: Joi.string()
       .min(3)
-      .max(50)
-      .required(),
-    bid_bond_percent: Joi.number().required(),
-    remarks: Joi.string()
-      .min(3)
-      .max(50)
-      .required(),
-    tendor_recieved_by: Joi.string()
-      .min(3)
-      .max(50)
-      .required(),
-    deadline: Joi.date().required()
-  };
+      .max(50),
+     };
   return Joi.validate(WorkOrder, schema);
 }
 exports.WorkOrder = WorkOrder;

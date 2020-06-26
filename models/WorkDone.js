@@ -1,56 +1,97 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const WorkDoneSchema = new mongoose.Schema({
+  tender_id:{
+    type: String,
+  },
+  workorder_id:{
+    type: String,
+  },
   details: [
     {
+      item:{
+        type: String, 
+      },
+      mb_sheet:{
+        type: String,
+      },
       description: {
         type: String,
-        required: true
+       
       },
       unit: {
-        type: Number,
-        required: true
+        type: String,
+        
       },
       rate: {
-        type: Number,
-        required: true
+        type: String,
+        
       },
       quantity: {
-        type: Number,
-        required: true
+        type: String,
+        
       },
       amount: {
-        type: Number
+        type: String
       }
     }
   ],
-  mb_id: {
-    type: String,
-    required: true
-  },
-  nonboq: [
+  mb: [
     {
-      item_name: {
+      boq_item: {
         type: String,
-        required: true
+        },
+      description: {
+        type: String,
+       
+      },
+      nos: {
+        type: String,
+        },
+      total: {
+        type: String,
       }
+      
     }
-  ]
+  ],
+  
+  // nonboq: [
+  //   {
+  //     item_name: {
+  //       type: String,
+  //       required: true
+  //     }
+  //   }
+  // mb_id: {
+  //   type: String,
+  //   required: true
+  // },
+  
 });
 const WorkDone = mongoose.model("WorkDone", WorkDoneSchema);
 function validateWorkDone(wd) {
   const schema = {
-    mb_id: Joi.string().required(),
+    // mb_id: Joi.string().required(),
+    tender_id : Joi.string(),
+    workorder_id : Joi.string(),
     details: Joi.array().items({
-      description: Joi.string().required(),
-      unit: Joi.string().required(),
-      rate: Joi.string().required(),
-      quantity: Joi.string().required(),
+      item:Joi.string(),
+      description: Joi.string(),
+      mb_sheet:Joi.string(),
+      unit: Joi.string(),
+      rate: Joi.string(),
+      quantity: Joi.string(),
       amount: Joi.string()
     }),
-    nonboq: Joi.string().items({
-      item_name: Joi.string().required()
-    })
+    mb: Joi.array().items({
+      boq_item:Joi.string(),
+      description: Joi.string(),
+      nos: Joi.string(),
+      total: Joi.string(),
+    }),
+    // nonboq: Joi.string().items({
+    //   item_name: Joi.string().required()
+    // })
   };
   return Joi.validate(wd, schema);
 }

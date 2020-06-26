@@ -10,14 +10,14 @@ const { Team } = require("../models/Team");
 
 router.post("/signup", async (req, res) => {
   const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).json({msg:error.details[0].message});
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send("User already registered.");
   const hash = await bcrypt.hash(req.body.password, 10);
   user = new User(req.body);
   user.password = hash;
   //user.roles = "Director";
-  user.roles = "CEO";
+  // user.roles = "CEO";
   await user.save();
   const token = jwt.sign(
     { _id: user._id, roles: user.roles },
@@ -52,6 +52,7 @@ router.post("/login", (req, res, next) => {
             token: token,
             email: user.email,
             roles: user.roles,
+            director_id: user.director
           });
         } else {
           res.send("not login");

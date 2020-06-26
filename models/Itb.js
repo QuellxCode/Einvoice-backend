@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 const ItbSchema = new mongoose.Schema({
   tender_id: { type: String },
+  assigned_eng_id: { type: String },
+  status: { type: String, default:'pending' },
   serial_number: {
     type: Number,
     required: true
@@ -55,6 +57,8 @@ const Itb = mongoose.model("Itb", ItbSchema);
 function validateItb(itb) {
   const schema = {
     tender_id: Joi.string(),
+    assigned_eng_id: Joi.string(),
+    status:Joi.string(),
     serial_number: Joi.number(),
     Diary: Joi.number(),
     title: Joi.string()

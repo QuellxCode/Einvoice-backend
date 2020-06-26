@@ -9,27 +9,36 @@ const { User } = require("../models/User");
 const { Tender } = require("../models/Tender");
 const { Itb } = require("../models/Itb");
 const { WorkOrder, validate } = require("../models/WorkOrder");
+const { QuotationLog } = require("../models/QuotationLog");
 
 router.post("/:id", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  let tender = await Tendor.findOne(req.params.id);
+  let tender = await Tender.findOne({_id:req.params.id});
   if (!tender) res.json({ msg: "No tender with such id exists" });
   let workorder = new WorkOrder(req.body);
   workorder.tender_id = req.params.id;
   workorder.save();
-  return res.send(200).json({
+  return res.json({
     workorder,
     tender,
-    itb
+    // itb
   });
 });
 
-router.get("/", auth, async (req, res) => {
-  let workorder = await WorkOrder.find({});
+router.get("/workorder-list", auth, async (req, res) => {
+  const role = req.user.roles;
+  let workorder  ;
+   
+  if(role === 'Director'){
+       workorder = await QuotationLog.find({director_id : req.user._id});
+  }else{
+      workorder = await QuotationLog.find({manager_id : req.user._id});
+  }
+   
   if (!workorder) res.json({ msg: "No WordOrder exists" });
-  return res.send(200).json({
-    workorder
+  res.json({
+    workorder,
   });
 });
 
