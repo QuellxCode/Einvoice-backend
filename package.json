@@ -1,5 +1,5 @@
 {
-  "name": "einvoice",
+  "name": "passport-test",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,21 +7,33 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
-    "config": "^3.3.0",
+    "config": "^3.2.5",
     "cors": "^2.8.5",
+    "cors-prefetch-middleware": "^1.0.0",
     "express": "^4.17.1",
+    "express-fileupload": "^1.1.6",
+    "formidable": "^1.2.2",
+    "fs": "0.0.1-security",
+    "images-upload-middleware": "^1.1.1",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.3",
-    "node-cron": "^2.0.3",
-    "nodemon": "^2.0.3",
+    "moment": "^2.24.0",
+    "mongoose": "^5.8.11",
+    "multer": "^1.4.2",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "save": "^2.4.0"
+    "path": "^0.12.7",
+    "socket.io": "^2.3.0",
+    "uuid": "^8.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }
