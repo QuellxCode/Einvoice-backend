@@ -1,4 +1,4 @@
 module.exports = {
-  MongoUri: "mongodb://localhost:27017/efund",
+  MongoUri: "mongodb://localhost:27017/eInvoice",
   ENVIRONMENT: "live"
 };

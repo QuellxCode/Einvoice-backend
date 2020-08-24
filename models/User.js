@@ -2,37 +2,58 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const Joi = require("joi");
 const UserSchema = new mongoose.Schema({
+  director: {
+    type: String
+  },
   name: {
     type: String,
-      },
+    required: true,
+    minlength: 3,
+    maxlength: 50
+  },
   address: {
     type: String,
-     },
+    required: true,
+    minlength: 5,
+    maxlength: 50
+  },
   phone: {
     type: String,
-      },
+    required: true,
+    minlength: 5,
+    maxlength: 50
+  },
   email: {
     type: String,
     required: true,
-    unique: true,
+    minlength: 5,
+    maxlength: 255,
+    unique: true
   },
   password: {
     type: String,
     required: true,
+    minlength: 5,
+    maxlength: 1024
   },
-  created_at: {
+  cnic: {
+    type: Number,
+    required: true,
+    unique: true
+  },
+  date: {
     type: Date,
-    default: Date.now,
+    default: Date.now
   },
   roles: {
-    type: String,
+    type: String
   },
-  success: {
+  refer_for_bid_bond_cermony: {
     type: String,
-  },
- 
+    default: 0
+  }
 });
-UserSchema.methods.isValidPassword = async function (password) {
+UserSchema.methods.isValidPassword = async function(password) {
   const user = this;
   const compare = await bcrypt.compare(password, user.password);
   return compare;
@@ -40,19 +61,33 @@ UserSchema.methods.isValidPassword = async function (password) {
 const User = mongoose.model("User", UserSchema);
 function validateUser(user) {
   const schema = {
-    name: Joi.string(),
-    phone: Joi.string(),
-    address: Joi.string(),
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    roles: Joi.string(),
-    success: Joi.string()
-   
-    // roles: Joi.array().items({
-    //   role: Joi.string()
-    //     .min(5)
-    //     .max(255)
-    // })
+    director: Joi.string(),
+    refer_for_bid_bond_cermony:Joi.string(),
+    name: Joi.string()
+      .min(3)
+      .max(50)
+      .required(),
+    address: Joi.string()
+      .min(3)
+      .max(50)
+      .required(),
+    email: Joi.string()
+      .min(5)
+      .max(255)
+      .required()
+      .email(),
+    phone: Joi.string()
+      .min(5)
+      .max(255)
+      .required(),
+    password: Joi.string()
+      .min(5)
+      .max(255)
+      .required(),
+    cnic: Joi.number().required(),
+    roles: Joi.string()
+      .min(5)
+      .max(255)
   };
   return Joi.validate(user, schema);
 }
