@@ -50,6 +50,10 @@ const DonationRequestSchema = new mongoose.Schema({
   },
   products:{
     type: Array
+  },
+  status:{
+    type: String,
+    default: 'pending'
   }
 });
 const DonationRequest = mongoose.model("DonationRequest", DonationRequestSchema);
@@ -68,6 +72,7 @@ function validateUser(donationrequest) {
     description: Joi.string(),
     image: Joi.string(),
     user_id:  Joi.string(),
+    status:  Joi.string(),
     products:Joi.array()
     // roles: Joi.array().items({
     //   role: Joi.string()

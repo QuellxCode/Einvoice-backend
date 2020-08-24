@@ -3,6 +3,7 @@ const router = express.Router();
 
 const auth = require("../middleware/auth");
 const {DonationRequest, validate } = require("../models/DonationRequest");
+const { DonationProduct } = require("../models/DonationProduct");
 
 
 
@@ -58,8 +59,9 @@ router.get("/:id", auth, async (req, res) => {
 });
 
 // get request of user
-router.get("/userProduct", auth, async (req, res) => {
-  let donationRequest = await DonationRequest.find({ user_id: req.user._id })
+router.get("/req/:id", auth, async (req, res) => {
+ console.log('id', req.user._id )
+  let donationRequest = await DonationRequest.find({ user_id:  req.params.id })
   if (!donationRequest) return res.status(400).json({msg:"No donationRequest exsit by this id!"});
  
   res.json({
@@ -82,22 +84,28 @@ router.delete("/:id", async (req, res) => {
 // update DonationRequest 
 router.post("/donation/:id", async (req, res) => {
 let  donationRequest_id = req.params.id;
+let pro_status = 1;
+if(req.body.status == 'Approved' || req.body.status == 'Donat e'){
+ pro_status = 0 
+}
+let request =  await DonationRequest.findById({_id : donationRequest_id }) 
+
+let donationProduct = await DonationProduct.findByIdAndUpdate(
+  { _id:  request.products[0]._id },
+  {
+    $set: {
+      status: pro_status,
+    },
+  },
+  { new: true }
+);
+
+
 let donationRequest = await DonationRequest.findByIdAndUpdate(
   { _id: donationRequest_id },
   {
     $set: {
-      name: req.body.name,
-      phone: req.body.phone,
-      address: req.body.address,
-      email: req.body.email,
-      country: req.body.country,
-      cnic: req.body.cnic,
-      state: req.body.state,
-      city: req.body.city,
-      landline_no:  req.body.landline_no,
-      description:  req.body.description,
-      image:  req.body.image
-     
+      status: req.body.status,
     },
   },
   { new: true }
