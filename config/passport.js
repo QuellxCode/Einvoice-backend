@@ -2,21 +2,23 @@ const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const { User } = require("../models/User");
-module.exports = function(passport) {
+module.exports = function (passport) {
   passport.use(
     "login",
     new LocalStrategy(
       {
         usernameField: "email",
-        passwordField: "password"
+        passwordField: "password",
       },
       async (email, password, done) => {
         try {
           //Find the user associated with the email provided by the user
-          let user = await User.findOne({ email });
+          let user = await User.findOne({ email: email });
           if (!user) {
             //If the user isn't found in the database, return a message
-            return done("user not found", false, { message: "User not found" });
+            return done({ message: "user not found" }, false, {
+              message: "User not found",
+            });
           }
           //Validate password and make sure it matches with the corresponding hash stored in the database
           //If the passwords match, it returns a value of true.
@@ -38,7 +40,7 @@ module.exports = function(passport) {
     new LocalStrategy(
       {
         usernameField: "email",
-        passwordField: "password"
+        passwordField: "password",
       },
       async (email, password, done) => {
         try {
@@ -53,12 +55,12 @@ module.exports = function(passport) {
     )
   );
 
-  passport.serializeUser(function(user, done) {
+  passport.serializeUser(function (user, done) {
     done(null, user.id);
   });
 
-  passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
+  passport.deserializeUser(function (id, done) {
+    User.findById(id, function (err, user) {
       done(err, user);
     });
   });
